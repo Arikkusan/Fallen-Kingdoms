@@ -1,0 +1,10 @@
+name: Fr.arikkusan.fk
+version: '${project.version}'
+main: fr.arikkusan.fallenkingdoms
+api-version: 1.19
+authors: [ Arikkusan ]
+commands:
+  fkteam:
+    description: Allow player to manage Teams
+    usage: /<command>
+    aliases: [fkt]
