@@ -2,6 +2,7 @@ package fr.arikkusan;
 
 import fr.arikkusan.FKClasses.FKList;
 import fr.arikkusan.command.FKTeamCommands;
+import fr.arikkusan.listeners.CommandManager;
 import fr.arikkusan.listeners.onStartStop;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public final class fallenkingdoms extends JavaPlugin implements Listener {
 
@@ -31,13 +33,14 @@ public final class fallenkingdoms extends JavaPlugin implements Listener {
         getServer().createBossBar("Fallen Kingdom 2023", BarColor.BLUE, BarStyle.SOLID).setVisible(true);
 
         getServer().getPluginManager().registerEvents(new onStartStop(teams), this);
+        getServer().getPluginManager().registerEvents(new CommandManager(teams), this);
 
 
         // FKTeam Command
         FKTeamCommands fkTeamCommands = new FKTeamCommands(teams);
 
-        getCommand("fkteam").setTabCompleter(fkTeamCommands);
-        getCommand("fkteam").setExecutor(fkTeamCommands);
+        Objects.requireNonNull(getCommand("fkteam")).setTabCompleter(fkTeamCommands);
+        Objects.requireNonNull(getCommand("fkteam")).setExecutor(fkTeamCommands);
 
 
     }
@@ -45,5 +48,6 @@ public final class fallenkingdoms extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "Fallen Kindoms plugin stopped with success");
     }
 }

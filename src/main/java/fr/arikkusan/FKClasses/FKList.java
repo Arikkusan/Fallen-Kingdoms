@@ -19,6 +19,17 @@ public class FKList extends ArrayList<FkTeam> {
 
     }
 
+    public FkTeam searchTeam(Player p) {
+
+        for (FkTeam t : this)
+            if (t.getTeamList().contains(p))
+                return t;
+
+
+        return null;
+
+    }
+
     public boolean contain(Player p) {
 
         for (FkTeam t : this)
