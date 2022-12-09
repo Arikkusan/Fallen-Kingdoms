@@ -19,12 +19,11 @@ public class FKList extends ArrayList<FkTeam> {
 
     }
 
-    public FkTeam searchTeam(Player p) {
+    public FkTeam searchTeam(Player player) {
 
         for (FkTeam t : this)
-            if (t.getTeamList().contains(p))
-                return t;
-
+            for (Player p : t.getTeamList())
+                if (p.getUniqueId().equals(player.getUniqueId())) return t;
 
         return null;
 
@@ -33,7 +32,8 @@ public class FKList extends ArrayList<FkTeam> {
     public boolean contain(Player p) {
 
         for (FkTeam t : this)
-            if (t.getTeamList().contains(p)) return true;
+            for (Player player : t.getTeamList())
+                if (player.getUniqueId().equals(p.getUniqueId())) return true;
 
         return false;
     }

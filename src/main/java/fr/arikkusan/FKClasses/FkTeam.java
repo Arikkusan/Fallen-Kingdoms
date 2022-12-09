@@ -21,8 +21,8 @@ public class FkTeam {
         this.teamList = new ArrayList<>();
         this.centerBase = new Location(Bukkit.getWorld("world"), 0, 0, 0);
         this.basePlacement = new ArrayList<>();
-        this.basePlacement.set(0, new Location(Bukkit.getWorld("world"), 0, 0, 0));
-        this.basePlacement.set(1, new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
     }
 
     public FkTeam(String teamName) {
@@ -31,8 +31,8 @@ public class FkTeam {
         this.teamList = new ArrayList<>();
         this.centerBase = new Location(Bukkit.getWorld("world"), 0, 0, 0);
         this.basePlacement = new ArrayList<>();
-        this.basePlacement.set(0, new Location(Bukkit.getWorld("world"), 0, 0, 0));
-        this.basePlacement.set(1, new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
     }
 
     public String getTeamName() {
@@ -103,12 +103,6 @@ public class FkTeam {
         x2 = basePlacement.get(1).getBlockX();
         y1 = basePlacement.get(0).getBlockX();
         y2 = basePlacement.get(1).getBlockX();
-        z1 = basePlacement.get(0).getBlockX();
-        z2 = basePlacement.get(1).getBlockX();
-
-
-        // vérifier les coffres (si besoin)
-
 
         // vérification hors hauteur
         if (x1 < x2) {
