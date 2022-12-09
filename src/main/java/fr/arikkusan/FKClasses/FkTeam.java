@@ -19,20 +19,20 @@ public class FkTeam {
         this.teamName = teamName;
         this.teamColor = teamColor;
         this.teamList = new ArrayList<>();
-        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 0, 0);
+        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 63, 0);
         this.basePlacement = new ArrayList<>();
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - 16, centerBase.getBlockY(), centerBase.getBlockZ() - 16));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
     }
 
     public FkTeam(String teamName) {
         this.teamName = teamName;
         this.teamColor = DyeColor.BLUE;
         this.teamList = new ArrayList<>();
-        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 0, 0);
+        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 63, 0);
         this.basePlacement = new ArrayList<>();
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), 0, 0, 0));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - 16, centerBase.getBlockY(), centerBase.getBlockZ() - 16));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
     }
 
     public String getTeamName() {
@@ -79,67 +79,29 @@ public class FkTeam {
         this.centerBase = centerBase;
     }
 
-    public ArrayList<Location> getBasePlacement() {
-        return basePlacement;
-    }
-
-    public void setBasePlacement(ArrayList<Location> basePlacement) {
-        this.basePlacement = basePlacement;
-    }
-
     public boolean inBaseArea(Location block) {
 
-        int x, y, z;
-        int x1, y1, z1;
-        int x2, y2, z2;
+        // x équivaut au X de la map
+        // z équivaut au Z de la map
+
+        int x, z;
+
+        int x1, z1;
+        int x2, z2;
 
         // coordonnées du block paramètre
         x = block.getBlockX();
-        y = block.getBlockY();
         z = block.getBlockZ();
 
         // coordonnées de la location de la base
         x1 = basePlacement.get(0).getBlockX();
         x2 = basePlacement.get(1).getBlockX();
-        y1 = basePlacement.get(0).getBlockX();
-        y2 = basePlacement.get(1).getBlockX();
 
-        // vérification hors hauteur
-        if (x1 < x2) {
+        z1 = basePlacement.get(0).getBlockZ();
+        z2 = basePlacement.get(1).getBlockZ();
 
-            return contionBlock(x, y, x2, y1, x1, y2);
-
-        } else {
-
-            return contionBlock(x, y, x1, y1, x2, y2);
-
-        }
+        return ((x >= x1 && x <= x2) && (z >= z1 && z <= z2));
     }
 
-    private boolean contionBlock(int x, int y, int x1, int y1, int x2, int y2) {
-        if (x >= x2 && x <= x1) {
-
-            if (y1 < y2) {
-
-                if (y >= y1 && y <= y2) {
-
-                    return true;
-
-                }
-            } else {
-
-                if (y >= y2 && y <= y1) {
-
-                    return true;
-
-                }
-
-            }
-
-
-
-        }
-        return false;
-    }
 }
 
