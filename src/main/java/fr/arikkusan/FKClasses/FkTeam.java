@@ -2,7 +2,6 @@ package fr.arikkusan.FKClasses;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -19,17 +18,7 @@ public class FkTeam {
         this.teamName = teamName;
         this.teamColor = teamColor;
         this.teamList = new ArrayList<>();
-        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 63, 0);
-        this.basePlacement = new ArrayList<>();
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - 16, centerBase.getBlockY(), centerBase.getBlockZ() - 16));
-        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
-    }
-
-    public FkTeam(String teamName) {
-        this.teamName = teamName;
-        this.teamColor = DyeColor.BLUE;
-        this.teamList = new ArrayList<>();
-        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 63, 0);
+        this.centerBase = new Location(Bukkit.getWorld("world"), 0, 83, 0);
         this.basePlacement = new ArrayList<>();
         this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - 16, centerBase.getBlockY(), centerBase.getBlockZ() - 16));
         this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
@@ -39,16 +28,8 @@ public class FkTeam {
         return teamName;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
     public DyeColor getTeamColor() {
         return teamColor;
-    }
-
-    public void setTeamColor(DyeColor teamColor) {
-        this.teamColor = teamColor;
     }
 
     public ArrayList<Player> getTeamList() {
@@ -56,8 +37,10 @@ public class FkTeam {
     }
 
     public void addMember(Player p) {
-        if (!teamList.contains(p))
+        if (!teamList.contains(p)) {
             this.teamList.add(p);
+            p.sendMessage(ChatColor.GOLD + "Vous avez rejoint la team " + ChatColor.BOLD + "" + ChatColor.valueOf(String.valueOf(this.teamColor)) + this.teamName);
+        }
         else {
             p.sendMessage(ChatColor.GREEN + "Vous êtes déjà présent dans la team " + ChatColor.BOLD + this.teamName);
         }
@@ -77,6 +60,8 @@ public class FkTeam {
 
     public void setCenterBase(Location centerBase) {
         this.centerBase = centerBase;
+        this.basePlacement.set(0, new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - 16, centerBase.getBlockY(), centerBase.getBlockZ() - 16));
+        this.basePlacement.set(1, new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
     }
 
     public boolean inBaseArea(Location block) {

@@ -3,11 +3,15 @@ package fr.arikkusan.command;
 import fr.arikkusan.FKClasses.FKList;
 import fr.arikkusan.FKClasses.FkTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Wool;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +20,17 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
 
     FKList teamList;
 
+    ArrayList<String> colors;
+
     public FKTeamCommands(FKList teams) {
         this.teamList = teams;
+        this.colors = new ArrayList<>();
+        colors.add("GRAY");
+        colors.add("BLUE");
+        colors.add("GREEN");
+        colors.add("RED");
+        colors.add("YELLOW");
+        colors.add("WHITE");
     }
 
     @Override
@@ -41,26 +54,47 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             sender.sendMessage(
                     ChatColor.GRAY +
                             "" +
-                    ChatColor.ITALIC +
+                            ChatColor.ITALIC +
                             "  La gestion de groupe sera désactivée lorsque la partie sera lancée !"
 
             );
 
         } else {
 
-            if (args[0].equalsIgnoreCase("create") && args.length >= 2) {
+            if (args[0].equalsIgnoreCase("create") && args.length == 2) {
+                sender.sendMessage(
+                        ChatColor.RED + "" +
+                                ChatColor.BOLD + "(!) " +
+                                ChatColor.RED +
+                                "Vous ne pouvez pas créer d'équipe sans renseigner de couleur, utilisez /FkTeam create <Nom_Equipe> <Couleur>");
+
+
+            }
+
+            if (args[0].equalsIgnoreCase("create") && args.length >= 3) {
                 ArrayList<String> teamNames = new ArrayList<>();
 
                 for (FkTeam t : teamList) teamNames.add(t.getTeamName());
 
-                if (!teamNames.contains(args[1])) {
-                    FkTeam team = new FkTeam(args[1]);
-                    teamList.add(team);
-                    sender.sendMessage(
-                            ChatColor.GREEN + "" +
-                                    ChatColor.BOLD + "(OK) " +
-                                    ChatColor.GREEN +
-                                    "Equipe " + args[1] + " crée avec succès !");
+                if (!teamNames.contains(args[1]) && args[2] != null) {
+                    FkTeam team;
+
+                    if (colors.contains(args[2])) {
+                        team = new FkTeam(args[1], DyeColor.valueOf(args[2]));
+                        teamList.add(team);
+                        sender.sendMessage(
+                                ChatColor.GREEN + "" +
+                                        ChatColor.BOLD + "(OK) " +
+                                        ChatColor.GREEN +
+                                        "Equipe " + args[1] + " crée avec succès !");
+                    } else
+                        sender.sendMessage(
+                                ChatColor.RED + "" +
+                                        ChatColor.RED + "(!) " +
+                                        ChatColor.RED +
+                                        "Erreur, couleur invalide renseignée !");
+
+
                 } else {
                     sender.sendMessage(
                             ChatColor.RED + "" +
@@ -78,14 +112,14 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.RED + "Aucune équipe n'existe pour le moment, utilisez /fkt pour plus d'information");
                 } else {
 
+                    sender.sendMessage(ChatColor.YELLOW + "Les différentes équipes sont :");
                     for (FkTeam t : teamList) {
-                        sender.sendMessage(ChatColor.YELLOW + "Les différentes équipes sont :");
                         sender.sendMessage(ChatColor.valueOf(t.getTeamColor().name()) + "  - " + t.getTeamName());
                         ArrayList<Player> Members = t.getTeamList();
 
                         if (Members != null) {
                             for (Player p : Members)
-                                sender.sendMessage(ChatColor.valueOf(t.getTeamColor().name()) + "      * " + p.getCustomName());
+                                sender.sendMessage(ChatColor.valueOf(t.getTeamColor().name()) + "        " + p.getDisplayName());
                         }
 
                     }
@@ -114,6 +148,18 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
                 }
             }
 
+            if (args[0].equalsIgnoreCase("center")) {
+                FkTeam team = teamList.searchTeam((Player) sender);
+                if (team != null)
+                    team.setCenterBase(((Player) sender).getLocation());
+                else
+                    sender.sendMessage(
+                            ChatColor.RED + "" +
+                            ChatColor.BOLD + "(!)" +
+                            ChatColor.RED + " Veuillez vous mettre dans une équipe pour pouvoir la centrer"
+                    );
+            }
+
         }
 
         return true;
@@ -132,7 +178,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             if (teamList.size() > 0) {
                 list.add("join");
                 list.add("quit");
-                list.add("update");
+                list.add("center");
                 list.add("delete");
             }
 
@@ -162,11 +208,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
 
         // if the user want to create a new team we tell us to give a specific color
         if (args.length == 3 && args[0].equalsIgnoreCase("create")) {
-            list.add("Blue");
-            list.add("Red");
-            list.add("Green");
-            list.add("Cyan");
-            list.add("Purple");
+            list.addAll(colors);
         }
 
 

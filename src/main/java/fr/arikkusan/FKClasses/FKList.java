@@ -1,5 +1,6 @@
 package fr.arikkusan.FKClasses;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -44,7 +45,12 @@ public class FKList extends ArrayList<FkTeam> {
 
         if (team != null)
             team.addMember(player);
-
+        else
+            player.sendMessage(
+                ChatColor.RED + "" +
+                        ChatColor.BOLD + "(!) " +
+                        ChatColor.RED +
+                        "Vous ne pouvez pas rejoindre une équipe inexistante, veuillez réessayer avec un nom valide");
 
     }
 

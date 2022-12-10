@@ -2,11 +2,14 @@ package fr.arikkusan.listeners;
 
 import fr.arikkusan.FKClasses.FKList;
 import fr.arikkusan.FKClasses.FkTeam;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -24,6 +27,20 @@ public class BlockPlacementListener implements Listener {
     }
 
     @EventHandler
+    // Breaking block is disabled when you're not in a team
+    public void onBlockBreak(BlockBreakEvent e) {
+
+        // get the player who placed the block
+        Player p = e.getPlayer();
+
+        // if the player is currently into a team
+        if (!teams.contain(p))
+            e.setCancelled(true);
+
+    }
+
+    @EventHandler
+    // Cancel the block placement if not in base area or allowed block
     public void onBlockPlaced(BlockPlaceEvent e) {
 
         // get the player who placed the block
@@ -45,12 +62,12 @@ public class BlockPlacementListener implements Listener {
                 // on vérifie le type de block
                 if (!((b.getType() == Material.WATER ||
                         b.getType() == Material.TORCH ||
+                        b.getType() == Material.SOUL_TORCH ||
                         b.getType() == Material.REDSTONE_TORCH ||
                         b.getType() == Material.TNT ||
                         b.getType() == Material.FIRE ||
                         b.getType() == Material.LAVA) &&
                         b.getLocation().getWorld() == Bukkit.getWorld("world")))
-
                     if (!team.inBaseArea(locationBlock)) {
                         // if not in base area
                         e.setCancelled(true);
@@ -58,16 +75,14 @@ public class BlockPlacementListener implements Listener {
 
             }
 
-        } else {
-            e.getPlayer().sendMessage("Block supprimé");
-            e.setCancelled(true);
-        }
+        } else e.setCancelled(true);
+
 
     }
 
     @EventHandler
+    // tell the distance to our base / if we're in our base
     public void onMoved(PlayerMoveEvent e) {
-
 
         // get the player who placed the block
         Player p = e.getPlayer();
@@ -83,21 +98,26 @@ public class BlockPlacementListener implements Listener {
 
                 // get coordinates of placed block
                 Location locationBlock = p.getLocation();
-
+                String msg;
                 if (!team.inBaseArea(locationBlock)) {
                     // if not in base area
+                    msg = ChatColor.GOLD + "Tu es à " + distancePoints(team.getCenterBase(), p.getLocation()) + " blocks de ta base";
 
-                    p.sendMessage("Tu es à " + distancePoints(team.getCenterBase(), p.getLocation()) + " blocks de ta base");
                 } else {
-                    p.sendMessage("Tu es dans ta base");
+                    msg = ChatColor.GOLD + "Tu es dans ta base";
                 }
+
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 
             }
 
         }
     }
 
+
     private int distancePoints(Location location1, Location location2) {
+
+        // return the distance between 2 location in nb of blocks
 
         int x1 = location1.getBlockX();
         int y1 = location1.getBlockY();
@@ -115,14 +135,10 @@ public class BlockPlacementListener implements Listener {
     }
 
     private int dist(int a, int b) {
-
-        int distance;
-
         if (a < b)
             return b - a;
         else
             return a - b;
-
     }
 
 

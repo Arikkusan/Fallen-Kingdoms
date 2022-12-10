@@ -1,7 +1,10 @@
 package fr.arikkusan;
 
 import fr.arikkusan.FKClasses.FKList;
+import fr.arikkusan.FKClasses.FK_Game;
+import fr.arikkusan.command.CustomNameCmd;
 import fr.arikkusan.command.FKTeamCommands;
+import fr.arikkusan.command.FkGameCommands;
 import fr.arikkusan.listeners.BlockPlacementListener;
 import fr.arikkusan.listeners.onStartStop;
 import org.bukkit.ChatColor;
@@ -14,12 +17,14 @@ import java.util.Objects;
 
 public final class fallenkingdoms extends JavaPlugin implements Listener {
 
-    FKList teams;
+    private FK_Game game;
+    private FKList teams;
 
     @Override
     public void onEnable() {
 
-        teams = new FKList();
+        game = new FK_Game();
+        teams = game.getFkList();
 
         // Plugin startup logic
         getServer().getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "Fallen Kindoms plugin launched with success");
@@ -31,10 +36,18 @@ public final class fallenkingdoms extends JavaPlugin implements Listener {
 
 
         // FKTeam Command
+        FkGameCommands gameCmd = new FkGameCommands(game, teams);
+        CustomNameCmd CustomNameCmd = new CustomNameCmd();
         FKTeamCommands fkTeamCommands = new FKTeamCommands(teams);
 
         Objects.requireNonNull(getCommand("fkteam")).setTabCompleter(fkTeamCommands);
         Objects.requireNonNull(getCommand("fkteam")).setExecutor(fkTeamCommands);
+
+        Objects.requireNonNull(getCommand("CustomName")).setTabCompleter(CustomNameCmd);
+        Objects.requireNonNull(getCommand("CustomName")).setExecutor(CustomNameCmd);
+
+        Objects.requireNonNull(getCommand("fk")).setTabCompleter(gameCmd);
+        Objects.requireNonNull(getCommand("fk")).setExecutor(gameCmd);
 
 
     }

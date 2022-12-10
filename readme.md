@@ -5,4 +5,6 @@ idées
 - timer jusqu'à hit ou 90 sec quand dans salle des coffres
 - mob aléatoires cheaté sur map avec loot
 - course contre la montre random
+- [dans serveur] compteur de morts par personne dans le tab
+- [?le faire] résumé type de morts / personnes
 - 
