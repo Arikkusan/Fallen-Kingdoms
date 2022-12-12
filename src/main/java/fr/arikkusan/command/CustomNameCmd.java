@@ -24,6 +24,7 @@ public class CustomNameCmd implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             ((Player) sender).setCustomName(args[0]);
+            ((Player) sender).setDisplayName((((Player) sender).getCustomName()));
             sender.sendMessage(
                     ChatColor.GOLD +
                             "Votre surnom a été défini en tant que " +
@@ -34,10 +35,10 @@ public class CustomNameCmd implements CommandExecutor, TabCompleter {
         else
             sender.sendMessage(
                     ChatColor.RED +
-                    "Pour obtenir un nom custom utilise la commande /CustomName <nomCustom>"
+                    "Pour obtenir un nom custom utilise la commande /CustomName <NomCustom>"
             );
 
-        return false;
+        return true;
     }
 
     @Override

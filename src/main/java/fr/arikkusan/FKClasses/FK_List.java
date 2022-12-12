@@ -5,12 +5,12 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class FKList extends ArrayList<FkTeam> {
+public class FK_List extends ArrayList<FK_Team> {
 
 
-    private FkTeam searchTeam(String name) {
+    private FK_Team searchTeam(String name) {
 
-        for (FkTeam t : this) {
+        for (FK_Team t : this) {
             if (t.getTeamName().equalsIgnoreCase(name)) {
                 return t;
             }
@@ -20,9 +20,9 @@ public class FKList extends ArrayList<FkTeam> {
 
     }
 
-    public FkTeam searchTeam(Player player) {
+    public FK_Team searchTeam(Player player) {
 
-        for (FkTeam t : this)
+        for (FK_Team t : this)
             for (Player p : t.getTeamList())
                 if (p.getUniqueId().equals(player.getUniqueId())) return t;
 
@@ -32,7 +32,7 @@ public class FKList extends ArrayList<FkTeam> {
 
     public boolean contain(Player p) {
 
-        for (FkTeam t : this)
+        for (FK_Team t : this)
             for (Player player : t.getTeamList())
                 if (player.getUniqueId().equals(p.getUniqueId())) return true;
 
@@ -41,7 +41,7 @@ public class FKList extends ArrayList<FkTeam> {
 
     public void add(Player player, String TeamName) {
 
-        FkTeam team = searchTeam(TeamName);
+        FK_Team team = searchTeam(TeamName);
 
         if (team != null)
             team.addMember(player);
@@ -55,7 +55,7 @@ public class FKList extends ArrayList<FkTeam> {
     }
 
     public boolean removeTeam(String teamName) {
-        FkTeam team = searchTeam(teamName);
+        FK_Team team = searchTeam(teamName);
 
         if (team != null) {
             this.remove(team);

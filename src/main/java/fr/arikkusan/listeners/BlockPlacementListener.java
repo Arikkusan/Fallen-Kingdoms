@@ -1,7 +1,7 @@
 package fr.arikkusan.listeners;
 
-import fr.arikkusan.FKClasses.FKList;
-import fr.arikkusan.FKClasses.FkTeam;
+import fr.arikkusan.FKClasses.FK_List;
+import fr.arikkusan.FKClasses.FK_Team;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -11,18 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import java.math.RoundingMode;
-import java.util.Collection;
-import java.util.Objects;
 
 public class BlockPlacementListener implements Listener {
 
-    FKList teams;
+    FK_List teams;
 
-    public BlockPlacementListener(FKList teams) {
+    public BlockPlacementListener(FK_List teams) {
         this.teams = teams;
     }
 
@@ -50,7 +45,7 @@ public class BlockPlacementListener implements Listener {
         if (teams.contain(p)) {
 
             // the var team = to the team of the player (thanks to searchTeam(p))
-            FkTeam team = teams.searchTeam(p);
+            FK_Team team = teams.searchTeam(p);
 
             // if the player's team isn't null then
             if (teams != null) {
@@ -91,7 +86,7 @@ public class BlockPlacementListener implements Listener {
         if (teams.contain(p)) {
 
             // the var team = to the team of the player (thanks to searchTeam(p))
-            FkTeam team = teams.searchTeam(p);
+            FK_Team team = teams.searchTeam(p);
 
             // if the player's team isn't null then
             if (teams != null) {

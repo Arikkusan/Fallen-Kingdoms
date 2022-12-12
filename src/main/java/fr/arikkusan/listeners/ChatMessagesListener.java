@@ -1,36 +1,34 @@
 package fr.arikkusan.listeners;
 
-import fr.arikkusan.FKClasses.FKList;
-import fr.arikkusan.FKClasses.FkTeam;
+import fr.arikkusan.FKClasses.FK_List;
+import fr.arikkusan.FKClasses.FK_Game;
+import fr.arikkusan.FKClasses.FK_Team;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandSendEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.event.player.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-public class onStartStop implements Listener {
+public class ChatMessagesListener implements Listener {
 
-    private final FKList teams;
+    private final FK_Game game;
+    private final FK_List teams;
 
-    public onStartStop(FKList teams) {
-
+    public ChatMessagesListener(FK_Game game, FK_List teams) {
+        this.game = game;
         this.teams = teams;
-
     }
 
     @EventHandler
-    public void team(PlayerJoinEvent e) {
+    public void playerJoin(PlayerJoinEvent e) {
 
         Player p = e.getPlayer();
 
-        FkTeam team = teams.searchTeam(p);
+        FK_Team team = teams.searchTeam(p);
 
         if (team != null) {
             e.setJoinMessage(
@@ -53,11 +51,11 @@ public class onStartStop implements Listener {
     }
 
     @EventHandler
-    public void team(PlayerQuitEvent e) {
+    public void playerQuit(PlayerQuitEvent e) {
 
         Player p = e.getPlayer();
 
-        FkTeam team = teams.searchTeam(p);
+        FK_Team team = teams.searchTeam(p);
 
         if (team != null) {
             e.setQuitMessage(
@@ -79,15 +77,35 @@ public class onStartStop implements Listener {
         }
     }
 
-
     @EventHandler
-    public void lockPlayers(PlayerMoveEvent e) {
+    public void chatMessages(AsyncPlayerChatEvent e) {
+        Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+        FK_Team t = teams.searchTeam(e.getPlayer());
+        e.setCancelled(true);
 
-        Collection<? extends Player> list = Bukkit.getServer().getOnlinePlayers();
+        for (Player p : players) {
+            if (t != null) {
+                p.sendMessage(
+                        ChatColor.GOLD + "" +
+                                ChatColor.valueOf(String.valueOf(t.getTeamColor())) + "[" +
+                                e.getPlayer().getCustomName() + "] - " +
+                                ChatColor.YELLOW +
+                                e.getMessage()
+                );
+            } else {
+                p.sendMessage(
+                        ChatColor.GOLD +
+                                "[" +
+                                e.getPlayer().getCustomName() + "] - " +
+                                ChatColor.YELLOW +
+                                e.getMessage()
+                );
+            }
+        }
+        if (t != null) {
 
-        for (Player p : list)
-            if (!teams.contain(p))
-                e.getPlayer().teleport(e.getFrom());
+        }
+
 
     }
 

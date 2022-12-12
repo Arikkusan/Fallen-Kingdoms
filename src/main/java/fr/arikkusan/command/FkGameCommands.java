@@ -8,7 +8,7 @@
 
 package fr.arikkusan.command;
 
-import fr.arikkusan.FKClasses.FKList;
+import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Game;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,9 +21,9 @@ import java.util.List;
 public class FkGameCommands implements CommandExecutor, TabCompleter {
 
     FK_Game game;
-    FKList teams;
+    FK_List teams;
 
-    public FkGameCommands(FK_Game game, FKList teamList) {
+    public FkGameCommands(FK_Game game, FK_List teamList) {
         this.game = game;
         this.teams = teamList;
     }

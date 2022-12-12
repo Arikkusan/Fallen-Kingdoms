@@ -11,9 +11,7 @@ package fr.arikkusan.FKClasses;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import java.util.ArrayList;
-
-public class FkScoreboard implements ScoreboardManager {
+public class FK_Scoreboard implements ScoreboardManager {
 
     @Override
     public Scoreboard getMainScoreboard() {

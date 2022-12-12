@@ -1,28 +1,25 @@
 package fr.arikkusan.command;
 
-import fr.arikkusan.FKClasses.FKList;
-import fr.arikkusan.FKClasses.FkTeam;
+import fr.arikkusan.FKClasses.FK_List;
+import fr.arikkusan.FKClasses.FK_Team;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Wool;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FKTeamCommands implements CommandExecutor, TabCompleter {
 
-    FKList teamList;
+    FK_List teamList;
 
     ArrayList<String> colors;
 
-    public FKTeamCommands(FKList teams) {
+    public FKTeamCommands(FK_List teams) {
         this.teamList = teams;
         this.colors = new ArrayList<>();
         colors.add("GRAY");
@@ -74,13 +71,13 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             if (args[0].equalsIgnoreCase("create") && args.length >= 3) {
                 ArrayList<String> teamNames = new ArrayList<>();
 
-                for (FkTeam t : teamList) teamNames.add(t.getTeamName());
+                for (FK_Team t : teamList) teamNames.add(t.getTeamName());
 
                 if (!teamNames.contains(args[1]) && args[2] != null) {
-                    FkTeam team;
+                    FK_Team team;
 
                     if (colors.contains(args[2])) {
-                        team = new FkTeam(args[1], DyeColor.valueOf(args[2]));
+                        team = new FK_Team(args[1], DyeColor.valueOf(args[2]));
                         teamList.add(team);
                         sender.sendMessage(
                                 ChatColor.GREEN + "" +
@@ -113,7 +110,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
                 } else {
 
                     sender.sendMessage(ChatColor.YELLOW + "Les différentes équipes sont :");
-                    for (FkTeam t : teamList) {
+                    for (FK_Team t : teamList) {
                         sender.sendMessage(ChatColor.valueOf(t.getTeamColor().name()) + "  - " + t.getTeamName());
                         ArrayList<Player> Members = t.getTeamList();
 
@@ -133,7 +130,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             }
 
             if (args[0].equalsIgnoreCase("quit")) {
-                for (FkTeam t : teamList)
+                for (FK_Team t : teamList)
                     t.removeMember((Player) sender);
             }
 
@@ -149,7 +146,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             }
 
             if (args[0].equalsIgnoreCase("center")) {
-                FkTeam team = teamList.searchTeam((Player) sender);
+                FK_Team team = teamList.searchTeam((Player) sender);
                 if (team != null)
                     team.setCenterBase(((Player) sender).getLocation());
                 else
@@ -188,7 +185,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
         // when the user want to add a player to a Team
         if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
             // for each team, we add the name of the team on the list
-            for (FkTeam team : teamList)
+            for (FK_Team team : teamList)
                 list.add(team.getTeamName());
         }
 
@@ -196,7 +193,7 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
         // if the user want to delete a specific team, then, we give him the names of the teams
         if (args.length == 2 && args[0].equalsIgnoreCase("delete")) {
 
-            for (FkTeam team : teamList)
+            for (FK_Team team : teamList)
                 list.add(team.getTeamName());
 
         }

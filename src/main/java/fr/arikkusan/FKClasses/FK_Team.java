@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class FkTeam {
+public class FK_Team {
 
     private String teamName;
     private DyeColor teamColor;
@@ -14,7 +14,7 @@ public class FkTeam {
     private Location centerBase;
     private ArrayList<Location> basePlacement;
 
-    public FkTeam(String teamName, DyeColor teamColor) {
+    public FK_Team(String teamName, DyeColor teamColor) {
         this.teamName = teamName;
         this.teamColor = teamColor;
         this.teamList = new ArrayList<>();

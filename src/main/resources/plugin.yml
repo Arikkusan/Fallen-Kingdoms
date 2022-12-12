@@ -1,6 +1,6 @@
 name: Arikkusan-Fallen_Kingdoms
 version: '${project.version}'
-main: fr.arikkusan.fallenkingdoms
+main: fr.arikkusan.main
 api-version: 1.19
 authors: [ Arikkusan ]
 commands:

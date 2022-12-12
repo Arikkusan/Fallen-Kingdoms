@@ -2,14 +2,14 @@ package fr.arikkusan.FKClasses;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class FKEvent {
+public class FK_Event {
 
     private String name;
     private String desc;
-    private FKDate startDate;
-    private FKDate duration;
+    private FK_Date startDate;
+    private FK_Date duration;
 
-    public FKEvent(@NonNull String name, @NonNull String desc, @NonNull FKDate startDate, @NonNull FKDate duration) {
+    public FK_Event(@NonNull String name, @NonNull String desc, @NonNull FK_Date startDate, @NonNull FK_Date duration) {
         this.name = name;
         this.desc = desc;
         this.startDate = startDate;
@@ -32,19 +32,19 @@ public class FKEvent {
         this.desc = desc;
     }
 
-    public FKDate getStartDate() {
+    public FK_Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(@NonNull FKDate startDate) {
+    public void setStartDate(@NonNull FK_Date startDate) {
         this.startDate = startDate;
     }
 
-    public FKDate getDuration() {
+    public FK_Date getDuration() {
         return duration;
     }
 
-    public void setDuration(@NonNull FKDate duration) {
+    public void setDuration(@NonNull FK_Date duration) {
         this.duration = duration;
     }
 }
