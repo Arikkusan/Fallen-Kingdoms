@@ -36,7 +36,7 @@ public class PlayerMovementListener implements Listener {
 
         if (game.isStarted() && game.isPaused() && !game.isFinished())
             for (Player p : list)
-                if (!teams.contain(p)) // && game.
+                if (teams.contain(p))
                     e.getPlayer().teleport(e.getFrom());
 
     }

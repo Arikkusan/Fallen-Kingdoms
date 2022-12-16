@@ -36,12 +36,16 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "start":
                     game.startGame();
+                    break;
                 case "pause":
                     game.pauseGame();
+                    break;
                 case "resume":
                     game.resumeGame();
+                    break;
                 case "stop":
                     game.stopGame();
+                    break;
             }
 
 

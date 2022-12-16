@@ -6,7 +6,7 @@ import fr.arikkusan.command.CustomNameCmd;
 import fr.arikkusan.command.FKTeamCommands;
 import fr.arikkusan.command.FkGameCommands;
 import fr.arikkusan.listeners.BlockPlacementListener;
-import fr.arikkusan.listeners.ChatMessagesListener;
+import fr.arikkusan.listeners.ChatJoinQuitListener;
 import fr.arikkusan.listeners.PlayerMovementListener;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -24,7 +24,7 @@ public final class main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
 
-        game = new FK_Game();
+        game = new FK_Game(this);
         teams = game.getFkList();
 
         // Plugin startup logic
@@ -33,7 +33,7 @@ public final class main extends JavaPlugin implements Listener {
         getServer().createBossBar("Fallen Kingdom 2023", BarColor.BLUE, BarStyle.SOLID).setVisible(true);
 
         getServer().getPluginManager().registerEvents(new PlayerMovementListener(game, teams), this);
-        getServer().getPluginManager().registerEvents(new ChatMessagesListener(game, teams), this);
+        getServer().getPluginManager().registerEvents(new ChatJoinQuitListener(this, game, teams), this);
         getServer().getPluginManager().registerEvents(new BlockPlacementListener(teams), this);
 
 

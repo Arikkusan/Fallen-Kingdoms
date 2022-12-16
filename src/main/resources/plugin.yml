@@ -8,14 +8,11 @@ commands:
     description: Allow player to manage Teams
     usage: /<command>
     aliases: [fkt]
-    permission: not op
   CustomName:
     description: Allow player to set their own Custom name
     usage: /<command>
     aliases: [cst]
-    permission: not op
   FallenKingdom:
     description: Run fallen Kingdoms logic
     usage: /<command>
     aliases: [fk, game]
-    permission: not op
