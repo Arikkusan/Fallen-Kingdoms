@@ -2,7 +2,7 @@ package fr.arikkusan;
 
 import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Game;
-import fr.arikkusan.command.CustomNameCmd;
+import fr.arikkusan.command.CustomNameCommands;
 import fr.arikkusan.command.FKTeamCommands;
 import fr.arikkusan.command.FkGameCommands;
 import fr.arikkusan.listeners.BlockPlacementListener;
@@ -34,11 +34,11 @@ public final class main extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new PlayerMovementListener(game, teams), this);
         getServer().getPluginManager().registerEvents(new ChatJoinQuitListener(this, game, teams), this);
-        getServer().getPluginManager().registerEvents(new BlockPlacementListener(teams), this);
+        getServer().getPluginManager().registerEvents(new BlockPlacementListener(game, teams), this);
 
 
         // FKTeam Command
-        CustomNameCmd CustomNameCmd = new CustomNameCmd();
+        CustomNameCommands CustomNameCmd = new CustomNameCommands(game);
         FkGameCommands gameCmd = new FkGameCommands(game, teams);
         FKTeamCommands fkTeamCommands = new FKTeamCommands(teams);
 

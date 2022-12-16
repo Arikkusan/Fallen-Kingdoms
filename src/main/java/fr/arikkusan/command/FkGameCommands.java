@@ -46,6 +46,9 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
                 case "stop":
                     game.stopGame();
                     break;
+                case "activatedragon":
+                    game.activateDragon();
+                    break;
             }
 
 
@@ -64,8 +67,11 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
             if (!game.isStarted())
                 tabCompletion.add("Start");
 
-            if (game.isStarted() && !game.isPaused() && !game.isFinished())
+            if (game.isStarted() && !game.isPaused() && !game.isFinished()) {
                 tabCompletion.add("Pause");
+                if (!game.getEvents().get(3).isActivated())
+                    tabCompletion.add("ActivateDragon");
+            }
 
             if (game.isStarted() && game.isPaused() && !game.isFinished())
                 tabCompletion.add("Resume");

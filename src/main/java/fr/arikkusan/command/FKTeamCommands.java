@@ -2,6 +2,7 @@ package fr.arikkusan.command;
 
 import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Team;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.command.Command;
@@ -9,8 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.lock.qual.GuardedByUnknown;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class FKTeamCommands implements CommandExecutor, TabCompleter {
@@ -97,7 +100,8 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
                             ChatColor.RED + "" +
                                     ChatColor.BOLD + "(!) " +
                                     ChatColor.RED +
-                                    "Vous ne pouvez pas créer cette équipe, une autre de ce même nom existe déjà");
+                                    "Vous ne pouvez pas créer cette équipe, une autre de ce même nom existe déjà"
+                    );
                 }
 
 
@@ -125,8 +129,28 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
 
             }
 
-            if (args[0].equalsIgnoreCase("join")) {
-                teamList.add((Player) sender, args[1]);
+            if (args[0].equalsIgnoreCase("join") && args.length == 2) {
+                Player p = (Player) sender;
+
+                if (teamList.contain(p))
+                    teamList.searchTeam(p).removeMember(p);
+                teamList.add(p, args[1]);
+            }
+
+            if (args[0].equalsIgnoreCase("join") && args.length == 3) {
+                Player p = findPlayer(args[2]);
+                if (p != null) {
+                    if (teamList.contain(p))
+                        teamList.searchTeam(p).removeMember(p);
+                    teamList.add(p, args[1]);
+                }
+                else
+                    sender.sendMessage(
+                            ChatColor.RED + "" +
+                                    ChatColor.BOLD + "(!) " +
+                                    ChatColor.RED +
+                                    "Vous ne pouvez pas ajouter une personne innexistante à une Team"
+                    );
             }
 
             if (args[0].equalsIgnoreCase("quit")) {
@@ -152,14 +176,24 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
                 else
                     sender.sendMessage(
                             ChatColor.RED + "" +
-                            ChatColor.BOLD + "(!)" +
-                            ChatColor.RED + " Veuillez vous mettre dans une équipe pour pouvoir la centrer"
+                                    ChatColor.BOLD + "(!)" +
+                                    ChatColor.RED + " Veuillez vous mettre dans une équipe pour pouvoir la centrer"
                     );
             }
 
         }
 
         return true;
+    }
+
+    private Player findPlayer(String name) {
+
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        for (Player p : players)
+            if (p.getName().equalsIgnoreCase(name))
+                return p;
+
+        return null;
     }
 
     @Override
@@ -170,9 +204,9 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
 
             list.add("create");
-            list.add("list");
 
             if (teamList.size() > 0) {
+                list.add("list");
                 list.add("join");
                 list.add("quit");
                 list.add("center");
@@ -187,6 +221,12 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
             // for each team, we add the name of the team on the list
             for (FK_Team team : teamList)
                 list.add(team.getTeamName());
+        }
+        if (args.length == 3 && args[0].equalsIgnoreCase("join")) {
+            // for each team, we add the name of the team on the list
+            Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+            for (Player p : players)
+                list.add(p.getName());
         }
 
 

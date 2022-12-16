@@ -43,14 +43,17 @@ public class FK_List extends ArrayList<FK_Team> {
 
         FK_Team team = searchTeam(TeamName);
 
-        if (team != null)
+        if (team != null) {
+            player.setPlayerListName(ChatColor.valueOf(String.valueOf(team.getTeamColor())) + "[" + team.getTeamName() + "] " + player.getCustomName());
             team.addMember(player);
+        }
         else
             player.sendMessage(
                 ChatColor.RED + "" +
                         ChatColor.BOLD + "(!) " +
                         ChatColor.RED +
-                        "Vous ne pouvez pas rejoindre une équipe inexistante, veuillez réessayer avec un nom valide");
+                        "Vous ne pouvez pas rejoindre une équipe inexistante, veuillez réessayer avec un nom valide"
+            );
 
     }
 
@@ -58,6 +61,11 @@ public class FK_List extends ArrayList<FK_Team> {
         FK_Team team = searchTeam(teamName);
 
         if (team != null) {
+
+            for (Player player: team.getTeamList()) {
+                player.setPlayerListName(ChatColor.GOLD + "[Punk à chien] " + player.getCustomName());
+            }
+
             this.remove(team);
             return true;
         }

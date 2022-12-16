@@ -1,6 +1,7 @@
 package fr.arikkusan.FKClasses;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.*;
@@ -118,6 +119,8 @@ public class FK_Game {
         }
 
         setStarted(true);
+        setFinished(false);
+        setPaused(false);
         startRunnable(players);
 
 
@@ -142,8 +145,10 @@ public class FK_Game {
                         if (getDate().changed()) {
                             FK_Event event = FK_Event.searchEventOfDay(events, getDate().getDay());
                             String message = "";
-                            if (event != null)
+                            if (event != null) {
                                 message = ChatColor.GREEN + "" + ChatColor.BOLD + event.getDesc();
+                                event.setActivated(true);
+                            }
 
                             for (Player p : players) {
 
@@ -274,5 +279,43 @@ public class FK_Game {
         );
 
         this.events = eventsList;
+    }
+
+    public void activateDragon() {
+        Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+        for (FK_Event event : getEvents()) {
+            if (event.getName().equalsIgnoreCase("dragon")) {
+
+                event.setActivated(true);
+                for (Player p: players) {
+                    p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Le Dragon a été activé, veuillez contacter Arikkusan pour plus d'informations !");
+                    p.sendTitle(
+                            ChatColor.GREEN + "" + ChatColor.BOLD + "Activation de l'Ender Dragon",
+                            ChatColor.GREEN + "Plus d'information auprès d'Arikkusan !",
+                            10,
+                            80,
+                            10
+                    );
+
+                    p.playSound(
+                            p.getLocation(),
+                            Sound.ENTITY_ENDER_DRAGON_GROWL,
+                            100,
+                            10
+                    );
+                }
+                break;
+            }
+        }
+
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 14, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 15, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 16, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 14, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 15, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 16, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 14, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 15, Material.AIR.createBlockData());
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 16, Material.AIR.createBlockData());
     }
 }

@@ -1,5 +1,6 @@
 package fr.arikkusan.listeners;
 
+import fr.arikkusan.FKClasses.FK_Game;
 import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Team;
 import net.md_5.bungee.api.ChatMessageType;
@@ -11,13 +12,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+
+import java.util.Collection;
+import java.util.Objects;
 
 public class BlockPlacementListener implements Listener {
 
+    private final FK_Game game;
     FK_List teams;
 
-    public BlockPlacementListener(FK_List teams) {
+    public BlockPlacementListener(FK_Game game, FK_List teams) {
+        this.game = game;
         this.teams = teams;
     }
 
@@ -29,7 +36,7 @@ public class BlockPlacementListener implements Listener {
         Player p = e.getPlayer();
 
         // if the player is currently into a team
-        if (!teams.contain(p))
+        if (!teams.contain(p) && !game.isStarted())
             e.setCancelled(true);
 
     }
@@ -53,24 +60,37 @@ public class BlockPlacementListener implements Listener {
                 // get coordinates of placed block
                 Block b = e.getBlockPlaced();
                 Location locationBlock = b.getLocation();
+                World w = b.getWorld();
 
                 // on vérifie le type de block
-                if (!((b.getType() == Material.WATER ||
-                        b.getType() == Material.TORCH ||
-                        b.getType() == Material.SOUL_TORCH ||
-                        b.getType() == Material.REDSTONE_TORCH ||
-                        b.getType() == Material.TNT ||
-                        b.getType() == Material.FIRE ||
-                        b.getType() == Material.LAVA) &&
-                        b.getLocation().getWorld() == Bukkit.getWorld("world")))
-                    if (!team.inBaseArea(locationBlock)) {
-                        // if not in base area
-                        e.setCancelled(true);
+
+                if (w == Bukkit.getWorld("world")) {
+                    if (!(b.getType() == Material.WATER ||
+                            b.getType() == Material.TORCH ||
+                            b.getType() == Material.SOUL_TORCH ||
+                            b.getType() == Material.REDSTONE_TORCH ||
+                            b.getType() == Material.TNT ||
+                            b.getType() == Material.FIRE ||
+                            b.getType() == Material.LAVA)) {
+
+                        if (!team.inBaseArea(locationBlock)) {
+
+                            // if not in base area
+                            e.setCancelled(true);
+
+                        }
+
                     }
+
+                }
+
+
 
             }
 
-        } else e.setCancelled(true);
+        } else if (!game.isStarted()) {
+            e.setCancelled(true);
+        }
 
 
     }
@@ -82,31 +102,39 @@ public class BlockPlacementListener implements Listener {
         // get the player who placed the block
         Player p = e.getPlayer();
 
-        // if the player is currently into a team
-        if (teams.contain(p)) {
+        World worldLocation = p.getLocation().getWorld();
 
-            // the var team = to the team of the player (thanks to searchTeam(p))
-            FK_Team team = teams.searchTeam(p);
+        if (worldLocation == Bukkit.getWorld("world")) {
 
-            // if the player's team isn't null then
-            if (teams != null) {
+            // if the player is currently into a team
+            if (teams.contain(p)) {
 
-                // get coordinates of placed block
-                Location locationBlock = p.getLocation();
-                String msg;
-                if (!team.inBaseArea(locationBlock)) {
-                    // if not in base area
-                    msg = ChatColor.GOLD + "Tu es à " + distancePoints(team.getCenterBase(), p.getLocation()) + " blocks de ta base";
+                // the var team = to the team of the player (thanks to searchTeam(p))
+                FK_Team team = teams.searchTeam(p);
 
-                } else {
-                    msg = ChatColor.GOLD + "Tu es dans ta base";
+                // if the player's team isn't null then
+                if (teams != null) {
+
+                    // get coordinates of placed block
+                    Location locationBlock = p.getLocation();
+                    String msg;
+                    if (!team.inBaseArea(locationBlock)) {
+                        // if not in base area
+                        msg = ChatColor.GOLD + "Tu es à " + distancePoints(team.getCenterBase(), p.getLocation()) + " blocks de ta base";
+
+                    } else {
+                        msg = ChatColor.GOLD + "Tu es dans ta base";
+                    }
+
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+
                 }
-
-                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
 
             }
 
         }
+
+
     }
 
 
@@ -137,25 +165,6 @@ public class BlockPlacementListener implements Listener {
     }
 
 
-/*
 
-    @EventHandler
-    public void onDropDragonGrowl(PlayerDropItemEvent e) {
-
-        e.setCancelled(true);
-
-        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-        for (Player p: players)
-            Objects.requireNonNull(Bukkit.getWorld("world"))
-                    .playSound(
-                            p.getLocation(),
-                            Sound.ENTITY_ENDER_DRAGON_GROWL,
-                            100,
-                            0
-                    );
-
-    }
-
- */
 
 }

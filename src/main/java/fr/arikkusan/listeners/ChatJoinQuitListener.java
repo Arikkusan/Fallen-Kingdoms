@@ -1,5 +1,6 @@
 package fr.arikkusan.listeners;
 
+import com.google.common.eventbus.DeadEvent;
 import fr.arikkusan.FKClasses.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,6 +8,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.*;
@@ -32,6 +34,10 @@ public class ChatJoinQuitListener implements Listener {
 
         Player p = e.getPlayer();
         start(p);
+
+        if (p.getCustomName() == null)
+            p.setCustomName(p.getName());
+
 
         FK_Team team = teams.searchTeam(p);
 
@@ -59,6 +65,8 @@ public class ChatJoinQuitListener implements Listener {
     public void playerQuit(PlayerQuitEvent e) {
 
         Player p = e.getPlayer();
+        if (p.getCustomName() == null)
+            p.setCustomName(p.getName());
 
         FK_Team team = teams.searchTeam(p);
 
@@ -87,7 +95,6 @@ public class ChatJoinQuitListener implements Listener {
             board.stop();
 
     }
-
     public void start(Player p) {
 
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -152,54 +159,94 @@ public class ChatJoinQuitListener implements Listener {
         // tasks
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective
-                .getScore(ChatColor.YELLOW + " ")
+                .getScore(teamColor(p))
                 .setScore(15);
         objective
-                .getScore(ChatColor.YELLOW + "Events :")
+                .getScore(ChatColor.YELLOW + " ")
                 .setScore(14);
         objective
-                .getScore(getColorEvent(game.getEvents().get(0)) + " - Jour " + game.getEvents().get(0).getStartDate() + " : " + game.getEvents().get(0).getName())
+                .getScore(ChatColor.YELLOW + "Events :")
                 .setScore(13);
         objective
-                .getScore(getColorEvent(game.getEvents().get(1)) + " - Jour " + game.getEvents().get(1).getStartDate() + " : " + game.getEvents().get(1).getName())
+                .getScore(getColorEvent(game.getEvents().get(0)) + " - Jour " + game.getEvents().get(0).getStartDate() + " : " + game.getEvents().get(0).getName())
                 .setScore(12);
         objective
-                .getScore(getColorEvent(game.getEvents().get(2)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(2).getName())
+                .getScore(getColorEvent(game.getEvents().get(1)) + " - Jour " + game.getEvents().get(1).getStartDate() + " : " + game.getEvents().get(1).getName())
                 .setScore(11);
         objective
-                .getScore(getColorEvent(game.getEvents().get(3)) + " - 3V3 : " + game.getEvents().get(3).getName())
+                .getScore(getColorEvent(game.getEvents().get(2)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(2).getName())
                 .setScore(10);
         objective
-                .getScore(ChatColor.YELLOW + "  ")
+                .getScore(getColorEvent(game.getEvents().get(3)) + " - 3V3 : " + game.getEvents().get(3).getName())
                 .setScore(9);
         objective
-                .getScore(ChatColor.RED + "Kills : " + p.getStatistic(Statistic.PLAYER_KILLS))
+                .getScore("  ")
                 .setScore(8);
         objective
-                .getScore(ChatColor.YELLOW + "   ")
+                .getScore(ChatColor.RED + "Kills : " + p.getStatistic(Statistic.PLAYER_KILLS))
                 .setScore(7);
         objective
                 .getScore(ChatColor.RED + "Morts : " + p.getStatistic(Statistic.DEATHS))
                 .setScore(6);
         objective
-                .getScore(ChatColor.YELLOW + "    ")
+                .getScore("    ")
                 .setScore(5);
-
         objective
-                .getScore(
-                        ChatColor.YELLOW + game.getDate().getGameDuration() +
-                                " <-> " +
-                                ChatColor.YELLOW + "JOUR " + game.getDate().getDay()
-                ).setScore(1);
+                .getScore(ChatColor.YELLOW + "Temps joué : " + game.getDate().getGameDuration())
+                .setScore(4);
+        objective
+                .getScore("     ")
+                .setScore(3);
+        objective
+                .getScore(ChatColor.YELLOW + "Timer : " + game.getDate().getDayDuration())
+                .setScore(2);
+        objective
+                .getScore(ChatColor.YELLOW + "Jour " + game.getDate().getDay())
+                .setScore(1);
 
 
         p.setScoreboard(sb);
 
     }
 
+    private String teamColor(Player p) {
+        if (game.getFkList().contain(p)) {
+            FK_Team t = game.getFkList().searchTeam(p);
+            return ChatColor.valueOf(String.valueOf(t.getTeamColor())) + "Équipe " + t.getTeamName();
+        }
+        else
+            return ChatColor.GRAY + "Spectateur";
+    }
+
     private ChatColor getColorEvent(FK_Event event) {
         return event.isActivated() ? ChatColor.GREEN : ChatColor.MAGIC;
     }
 
+    @EventHandler
+    public void deathMessages(PlayerDeathEvent e) {
+
+        Player p = e.getEntity();
+        FK_Team team = teams.searchTeam(p);
+
+        if (team != null) {
+            e.setDeathMessage(
+                    ChatColor.GOLD +
+                            "FK - " +
+                            ChatColor.valueOf(String.valueOf(team.getTeamColor())) +
+                            p.getCustomName() +
+                            ChatColor.GOLD +
+                            Objects.requireNonNull(e.getDeathMessage()).substring(e.getDeathMessage().indexOf(" "))
+            );
+        } else {
+            e.setDeathMessage(
+                    ChatColor.GOLD +
+                            "FK - " +
+                            p.getCustomName() +
+                            ChatColor.GOLD +
+                            Objects.requireNonNull(e.getDeathMessage()).substring(e.getDeathMessage().indexOf(" "))
+            );
+        }
+
+    }
 
 }

@@ -35,6 +35,25 @@ public class FK_Date {
         return duration;
     }
 
+    public String getDayDuration() {
+        String duration = "";
+
+        int m = minute % 20;
+
+        if (m > 9)
+            duration += m;
+        else
+            duration += "0" + m;
+
+        duration += ":";
+
+        if (sec > 9)
+            duration += sec;
+        else duration += "0" + sec;
+
+        return duration;
+    }
+
     public int getDay() {
         return day;
     }
