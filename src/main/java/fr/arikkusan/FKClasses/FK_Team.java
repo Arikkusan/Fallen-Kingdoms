@@ -40,8 +40,7 @@ public class FK_Team {
         if (!teamList.contains(p)) {
             this.teamList.add(p);
             p.sendMessage(ChatColor.GOLD + "Vous avez rejoint la team " + ChatColor.BOLD + "" + ChatColor.valueOf(String.valueOf(this.teamColor)) + this.teamName);
-        }
-        else {
+        } else {
             p.sendMessage(ChatColor.GREEN + "Vous êtes déjà présent dans la team " + ChatColor.BOLD + this.teamName);
         }
     }
@@ -85,7 +84,7 @@ public class FK_Team {
         z1 = basePlacement.get(0).getBlockZ();
         z2 = basePlacement.get(1).getBlockZ();
 
-        return ((x >= x1 && x <= x2) && (z >= z1 && z <= z2));
+        return ((x >= x1 && x <= x2) && (z >= z1 && z <= z2) && block.getWorld() == Bukkit.getWorld("world"));
     }
 
 }

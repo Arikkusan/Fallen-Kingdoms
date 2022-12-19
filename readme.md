@@ -1,10 +1,13 @@
 Fallen Kingdoms fait par Arikkusan
 
 ## Idées :
-- pause / remise de joueur dans d'autre équipe après perte de partie FAIT
-- timer jusqu'à hit ou 90 sec quand dans salle des coffres 
+- Flèche indiquant la base
+- disable fire aspect
+- timer jusqu'à hit ou 60 sec quand dans salle des coffres 
 - mob aléatoires cheaté sur map avec loot
 - course contre la montre random
-- [dans serveur] compteur de morts par personne FAIT
+-
 - [?le faire] résumé type de morts / personnes
-- 
+- remettre les noms custom dans scoreboard quand déco-reco - FAIT?
+- [dans serveur] compteur de morts par personne - FAIT
+- pas casser block chez ennemis - FAIT

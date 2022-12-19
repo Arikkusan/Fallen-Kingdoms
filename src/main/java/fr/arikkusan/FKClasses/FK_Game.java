@@ -1,8 +1,11 @@
 package fr.arikkusan.FKClasses;
 
+import fr.arikkusan.listeners.ChatJoinQuitListener;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -32,7 +35,7 @@ public class FK_Game {
 
     public FK_Game(Plugin plugin) {
         this.plugin = plugin;
-        this.FkTitle = "Fallen Kingdoms I";
+        this.FkTitle = "Fallen Kingdoms";
         this.fkList = new FK_List();
         setEvents();
         day = new FK_Date(1, 0);
@@ -44,6 +47,10 @@ public class FK_Game {
 
     public void setFkTitle(@NonNull String fkTitle) {
         FkTitle = fkTitle;
+        Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+        //for (Player p: players)
+          //  p.kickPlayer(ChatColor.AQUA + "Reload du Scoreboard, merci de vous reconnecter !");
+
     }
 
 
@@ -108,6 +115,8 @@ public class FK_Game {
                     40,
                     10
             );
+
+            p.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 16));
 
             if (team != null) {
                 p.teleport(team.getCenterBase());
@@ -254,27 +263,28 @@ public class FK_Game {
                 new FK_Event(
                         "PVP",
                         "Activiation du PVP !",
-                        2
+                        3
                 )
         );
         eventsList.add(
                 new FK_Event(
                         "Nether",
                         "Activation du Nether !",
-                        4
+                        5
+                )
+        );
+        eventsList.add(
+                new FK_Event(
+                        "Dragon",
+                        "Activation de l'end, Le dragon est accessible !",
+                        7
                 )
         );
         eventsList.add(
                 new FK_Event(
                         "Assauts",
                         "Les assauts sont désormais possibles !",
-                        7
-                )
-        );
-        eventsList.add(
-                new FK_Event(
-                        "Dragon",
-                        "Activation de l'end, Le dragon est accessible !"
+                        8
                 )
         );
 
@@ -308,14 +318,14 @@ public class FK_Game {
             }
         }
 
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 14, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 15, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(20, 138, 16, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 14, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 15, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(21, 138, 16, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 14, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 15, Material.AIR.createBlockData());
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(22, 138, 16, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 92, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 93, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 94, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 92, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 93, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 94, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 92, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 93, Material.AIR.createBlockData());
+        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 94, Material.AIR.createBlockData());
     }
 }

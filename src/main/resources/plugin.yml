@@ -16,3 +16,6 @@ commands:
     description: Run fallen Kingdoms logic
     usage: /<command>
     aliases: [fk, game]
+  gm:
+    description: Put the user in gm1 / gm0
+    usage: /<command>

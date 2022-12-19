@@ -14,7 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -35,9 +37,31 @@ public class BlockPlacementListener implements Listener {
         // get the player who placed the block
         Player p = e.getPlayer();
 
+        ArrayList<FK_Team> fkTeamsCheckList = new ArrayList<>(teams);
+
         // if the player is currently into a team
-        if (!teams.contain(p) && !game.isStarted())
+        if (teams.contain(p) && !game.isStarted())
             e.setCancelled(true);
+
+        if (teams.contain(p)) {
+            FK_Team team = teams.searchTeam(p);
+            if (team != null) {
+                fkTeamsCheckList.remove(team);
+                if (game.isStarted()) {
+
+                    for (FK_Team teamBlock : fkTeamsCheckList) {
+                        if (teamBlock.inBaseArea(e.getBlock().getLocation())) {
+                            e.setCancelled(true);
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
 
     }
 
@@ -67,8 +91,11 @@ public class BlockPlacementListener implements Listener {
                 if (w == Bukkit.getWorld("world")) {
                     if (!(b.getType() == Material.WATER ||
                             b.getType() == Material.TORCH ||
+                            b.getType() == Material.WALL_TORCH ||
                             b.getType() == Material.SOUL_TORCH ||
+                            b.getType() == Material.SOUL_WALL_TORCH ||
                             b.getType() == Material.REDSTONE_TORCH ||
+                            b.getType() == Material.REDSTONE_WALL_TORCH ||
                             b.getType() == Material.TNT ||
                             b.getType() == Material.FIRE ||
                             b.getType() == Material.LAVA)) {
@@ -83,7 +110,6 @@ public class BlockPlacementListener implements Listener {
                     }
 
                 }
-
 
 
             }
@@ -163,8 +189,6 @@ public class BlockPlacementListener implements Listener {
         else
             return a - b;
     }
-
-
 
 
 }

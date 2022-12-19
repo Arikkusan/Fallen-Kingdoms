@@ -2,6 +2,7 @@ package fr.arikkusan.listeners;
 
 import com.google.common.eventbus.DeadEvent;
 import fr.arikkusan.FKClasses.*;
+import fr.arikkusan.utils.Fct_Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -37,6 +38,8 @@ public class ChatJoinQuitListener implements Listener {
 
         if (p.getCustomName() == null)
             p.setCustomName(p.getName());
+
+        new Fct_Utils().setListName(game, p);
 
 
         FK_Team team = teams.searchTeam(p);
@@ -177,7 +180,7 @@ public class ChatJoinQuitListener implements Listener {
                 .getScore(getColorEvent(game.getEvents().get(2)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(2).getName())
                 .setScore(10);
         objective
-                .getScore(getColorEvent(game.getEvents().get(3)) + " - 3V3 : " + game.getEvents().get(3).getName())
+                .getScore(getColorEvent(game.getEvents().get(3)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(3).getName())
                 .setScore(9);
         objective
                 .getScore("  ")

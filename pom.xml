@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>Fallen-Kingdoms</groupId>
-    <artifactId>Arksn-Fallen-Kingdoms</artifactId>
-    <version>1.0</version>
+    <artifactId>Arksn-FallenKingdoms</artifactId>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>Fr.arikkusan.fk</name>

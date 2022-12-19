@@ -31,9 +31,16 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length == 1) {
+        if (args.length >= 1) {
 
             switch (args[0].toLowerCase()) {
+                case "nom":
+                    StringBuilder title = new StringBuilder();
+                    for (int i = 1; i < args.length; i++)
+                        title.append(args[i]).append(" ");
+
+                    game.setFkTitle(String.valueOf(title));
+                    break;
                 case "start":
                     game.startGame();
                     break;
@@ -64,8 +71,10 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
         // first command argument
         if (args.length == 1) {
 
-            if (!game.isStarted())
+            if (!game.isStarted()) {
                 tabCompletion.add("Start");
+                tabCompletion.add("Nom");
+            }
 
             if (game.isStarted() && !game.isPaused() && !game.isFinished()) {
                 tabCompletion.add("Pause");

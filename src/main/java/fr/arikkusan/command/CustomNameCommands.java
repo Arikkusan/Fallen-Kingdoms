@@ -10,6 +10,7 @@ package fr.arikkusan.command;
 
 import fr.arikkusan.FKClasses.FK_Game;
 import fr.arikkusan.FKClasses.FK_Team;
+import fr.arikkusan.utils.Fct_Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -49,7 +50,7 @@ public class CustomNameCommands implements CommandExecutor, TabCompleter {
                         player.setCustomName(args[0]);
                         player.setDisplayName(p.getCustomName());
 
-                        setCustomName(player);
+                        new Fct_Utils().setListName(game, player);
 
                         p.sendMessage(
                                 ChatColor.GOLD +
@@ -74,7 +75,7 @@ public class CustomNameCommands implements CommandExecutor, TabCompleter {
                             p.getCustomName()
             );
 
-            setCustomName(p);
+            new Fct_Utils().setListName(game, p);
 
         } else
             p.sendMessage(
@@ -83,19 +84,6 @@ public class CustomNameCommands implements CommandExecutor, TabCompleter {
             );
 
         return true;
-    }
-
-    private void setCustomName(Player p) {
-        if (game.getFkList().contain(p)) {
-
-            FK_Team team = game.getFkList().searchTeam(p);
-
-            if (team != null)
-                p.setPlayerListName(ChatColor.valueOf(String.valueOf(team.getTeamColor())) + "[" + team.getTeamName() + "] " + p.getCustomName());
-            else
-                p.setPlayerListName(ChatColor.GRAY + "" + ChatColor.BOLD +  "[Maitre de partie] " + p.getDisplayName());
-
-        }
     }
 
     @Override
