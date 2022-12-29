@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class FK_List extends ArrayList<FK_Team> {
 
 
-    private FK_Team searchTeam(String name) {
+    public FK_Team searchTeam(String name) {
 
         for (FK_Team t : this) {
             if (t.getTeamName().equalsIgnoreCase(name)) {
@@ -22,12 +22,13 @@ public class FK_List extends ArrayList<FK_Team> {
 
     public FK_Team searchTeam(Player player) {
 
+        if (!this.contain(player)) return null;
+
         for (FK_Team t : this)
             for (Player p : t.getTeamList())
                 if (p.getUniqueId().equals(player.getUniqueId())) return t;
 
         return null;
-
     }
 
     public boolean contain(Player p) {

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class FK_Team {
 
     private String teamName;
-    private DyeColor teamColor;
-    private ArrayList<Player> teamList;
+    private final DyeColor teamColor;
+    private final ArrayList<Player> teamList;
 
     private Location centerBase;
     private ArrayList<Location> basePlacement;
@@ -24,8 +24,17 @@ public class FK_Team {
         this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + 16, centerBase.getBlockY(), centerBase.getBlockZ() + 16));
     }
 
+    public void setTeamRayon(int rayon) {
+        this.basePlacement = new ArrayList<>();
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() - rayon, centerBase.getBlockY(), centerBase.getBlockZ() - rayon));
+        this.basePlacement.add(new Location(Bukkit.getWorld("world"), centerBase.getBlockX() + rayon, centerBase.getBlockY(), centerBase.getBlockZ() + rayon));
+    }
+
     public String getTeamName() {
         return teamName;
+    }
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
     public DyeColor getTeamColor() {

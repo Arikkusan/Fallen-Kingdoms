@@ -1,24 +1,24 @@
 package fr.arikkusan.FKClasses;
 
-import fr.arikkusan.listeners.ChatJoinQuitListener;
+
+
+import fr.arikkusan.Items.ItemsManager;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scoreboard.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.units.qual.A;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+
 import java.util.Objects;
 
 public class FK_Game {
 
-    private String FK_TIME_RUNNABLE_ID = "FK_TIME_RUNNABLE";
+    private static final String DAYLIGHT_CYCLE = "doDaylightCycle";
+    private final String FK_TIME_RUNNABLE_ID = "FK_TIME_RUNNABLE";
     private final Plugin plugin;
     private int taskID;
     private String FkTitle;
@@ -28,7 +28,6 @@ public class FK_Game {
     private final FK_List fkList;
 
     private FK_Date day;
-    private ScoreboardManager gameScoreboard = Bukkit.getScoreboardManager();
 
     private ArrayList<FK_Event> events = new ArrayList<>();
 
@@ -45,12 +44,8 @@ public class FK_Game {
         return FkTitle;
     }
 
-    public void setFkTitle(@NonNull String fkTitle) {
+    public void setFkTitle(String fkTitle) {
         FkTitle = fkTitle;
-        Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
-        //for (Player p: players)
-          //  p.kickPlayer(ChatColor.AQUA + "Reload du Scoreboard, merci de vous reconnecter !");
-
     }
 
 
@@ -92,7 +87,9 @@ public class FK_Game {
 
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
 
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        World world = Bukkit.getServer().getWorld("world");
+
+        world.setGameRuleValue(DAYLIGHT_CYCLE, "true");
         Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setTime(0);
 
 
@@ -110,19 +107,19 @@ public class FK_Game {
             p.setLevel(0);
             p.sendTitle(
                     ChatColor.GOLD + "Début du Fallen Kingdoms !",
-                    ChatColor.GOLD + "Démarrage en cours...",
-                    10,
-                    40,
-                    10
+                    ChatColor.GOLD + "Démarrage en cours..."
             );
 
-            p.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 16));
 
             if (team != null) {
                 p.teleport(team.getCenterBase());
                 p.setGameMode(GameMode.SURVIVAL);
+                p.setCompassTarget(team.getCenterBase());
+                p.getInventory().setItem(8, new ItemStack(Material.COOKED_BEEF, 16));
+                p.getInventory().setItem(7, ItemsManager.baseCompass);
             } else {
                 p.setGameMode(GameMode.SPECTATOR);
+                p.getInventory().setItem(8, ItemsManager.playerMenu);
             }
 
         }
@@ -142,7 +139,7 @@ public class FK_Game {
                 plugin,
                 new Runnable() {
 
-                    FK_Time_Runnable board = new FK_Time_Runnable(FK_TIME_RUNNABLE_ID);
+                    final FK_Time_Runnable board = new FK_Time_Runnable(FK_TIME_RUNNABLE_ID);
 
                     @Override
                     public void run() {
@@ -166,10 +163,7 @@ public class FK_Game {
 
                                 p.sendTitle(
                                         ChatColor.GOLD + "" + ChatColor.BOLD + getFkTitle() + " : " + "Jour " + getDate().getDay(),
-                                        message,
-                                        10,
-                                        20,
-                                        10
+                                        message
                                 );
                             }
                         }
@@ -183,7 +177,7 @@ public class FK_Game {
     }
 
     public void pauseGame() {
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRuleValue(DAYLIGHT_CYCLE, "true");
         setPaused(true);
 
         FK_Time_Runnable board = new FK_Time_Runnable(FK_TIME_RUNNABLE_ID);
@@ -205,7 +199,7 @@ public class FK_Game {
     }
 
     public void resumeGame() {
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRuleValue(DAYLIGHT_CYCLE, "true");
         setPaused(false);
 
 
@@ -223,7 +217,7 @@ public class FK_Game {
     }
 
     public void stopGame() {
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRuleValue(DAYLIGHT_CYCLE, "true");
         Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setTime(0);
         setFinished(true);
 
@@ -242,10 +236,7 @@ public class FK_Game {
 
             p.sendTitle(
                     ChatColor.GOLD + "" + ChatColor.BOLD + getFkTitle(),
-                    ChatColor.GOLD + "Fin de partie",
-                    10,
-                    80,
-                    10
+                    ChatColor.GOLD + "Fin de partie"
             );
 
         }
@@ -301,15 +292,12 @@ public class FK_Game {
                     p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Le Dragon a été activé, veuillez contacter Arikkusan pour plus d'informations !");
                     p.sendTitle(
                             ChatColor.GREEN + "" + ChatColor.BOLD + "Activation de l'Ender Dragon",
-                            ChatColor.GREEN + "Plus d'information auprès d'Arikkusan !",
-                            10,
-                            80,
-                            10
+                            ChatColor.GREEN + "Plus d'information auprès d'Arikkusan !"
                     );
 
                     p.playSound(
                             p.getLocation(),
-                            Sound.ENTITY_ENDER_DRAGON_GROWL,
+                            Sound.ENDERDRAGON_GROWL,
                             100,
                             10
                     );
@@ -317,15 +305,5 @@ public class FK_Game {
                 break;
             }
         }
-
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 92, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 93, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-35, 112, 94, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 92, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 93, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-36, 112, 94, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 92, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 93, Material.AIR.createBlockData());
-        // Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setBlockData(-37, 112, 94, Material.AIR.createBlockData());
     }
 }

@@ -1,6 +1,7 @@
 Fallen Kingdoms fait par Arikkusan
 
 ## Idées :
+- taux d'apparition de creep a revoir
 - Flèche indiquant la base
 - disable fire aspect
 - timer jusqu'à hit ou 60 sec quand dans salle des coffres 

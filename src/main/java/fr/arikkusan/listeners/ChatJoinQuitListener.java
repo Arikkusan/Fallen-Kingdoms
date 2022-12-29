@@ -1,10 +1,11 @@
 package fr.arikkusan.listeners;
 
-import com.google.common.eventbus.DeadEvent;
 import fr.arikkusan.FKClasses.*;
-import fr.arikkusan.utils.Fct_Utils;
+import fr.arikkusan.Items.ItemsManager;
+import fr.arikkusan.utils.FK_Functions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,8 +40,17 @@ public class ChatJoinQuitListener implements Listener {
         if (p.getCustomName() == null)
             p.setCustomName(p.getName());
 
-        new Fct_Utils().setListName(game, p);
+        if (!p.getInventory().contains(ItemsManager.mainMenu) && !game.isStarted())
+            p.getInventory().addItem(ItemsManager.mainMenu);
 
+        /*
+
+        if (p.getInventory().contains(ItemsManager.playerMenu) && game.isStarted())
+            p.getInventory().addItem(ItemsManager.playerMenu);
+
+        */
+
+        new FK_Functions().setListName(game, p);
 
         FK_Team team = teams.searchTeam(p);
 
@@ -98,6 +108,7 @@ public class ChatJoinQuitListener implements Listener {
             board.stop();
 
     }
+
     public void start(Player p) {
 
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -130,15 +141,14 @@ public class ChatJoinQuitListener implements Listener {
                 p.sendMessage(
                         ChatColor.GOLD + "" +
                                 ChatColor.valueOf(String.valueOf(t.getTeamColor())) + "[" +
-                                e.getPlayer().getCustomName() + "] - " +
+                                t.getTeamName() + "] " + e.getPlayer().getCustomName() + " - " +
                                 ChatColor.YELLOW +
                                 e.getMessage()
                 );
             } else {
                 p.sendMessage(
                         ChatColor.GOLD +
-                                "[" +
-                                e.getPlayer().getCustomName() + "] - " +
+                                e.getPlayer().getCustomName() + " - " +
                                 ChatColor.YELLOW +
                                 e.getMessage()
                 );
@@ -151,78 +161,67 @@ public class ChatJoinQuitListener implements Listener {
         Scoreboard sb = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
         Objective objective = sb.registerNewObjective(
                 "fkName",
-                "dummy",
+                "dummy"
+        );
+
+        objective.setDisplayName(
                 ChatColor.RED +
                         "" +
                         ChatColor.BOLD +
                         game.getFkTitle()
         );
 
-
         // tasks
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective
-                .getScore(teamColor(p))
+                .getScore(ChatColor.YELLOW + "Events :")
                 .setScore(15);
         objective
-                .getScore(ChatColor.YELLOW + " ")
+                .getScore(getColorEvent(game.getEvents().get(0)) + " - Jour " + game.getEvents().get(0).getStartDate() + " : " + game.getEvents().get(0).getName())
                 .setScore(14);
         objective
-                .getScore(ChatColor.YELLOW + "Events :")
+                .getScore(getColorEvent(game.getEvents().get(1)) + " - Jour " + game.getEvents().get(1).getStartDate() + " : " + game.getEvents().get(1).getName())
                 .setScore(13);
         objective
-                .getScore(getColorEvent(game.getEvents().get(0)) + " - Jour " + game.getEvents().get(0).getStartDate() + " : " + game.getEvents().get(0).getName())
+                .getScore(getColorEvent(game.getEvents().get(2)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(2).getName())
                 .setScore(12);
         objective
-                .getScore(getColorEvent(game.getEvents().get(1)) + " - Jour " + game.getEvents().get(1).getStartDate() + " : " + game.getEvents().get(1).getName())
+                .getScore(getColorEvent(game.getEvents().get(3)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(3).getName())
                 .setScore(11);
         objective
-                .getScore(getColorEvent(game.getEvents().get(2)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(2).getName())
+                .getScore("  ")
                 .setScore(10);
         objective
-                .getScore(getColorEvent(game.getEvents().get(3)) + " - Jour " + game.getEvents().get(2).getStartDate() + " : " + game.getEvents().get(3).getName())
+                .getScore(ChatColor.RED + "Kills : " + p.getStatistic(Statistic.PLAYER_KILLS))
                 .setScore(9);
         objective
-                .getScore("  ")
+                .getScore(ChatColor.RED + "Morts : " + p.getStatistic(Statistic.DEATHS))
                 .setScore(8);
         objective
-                .getScore(ChatColor.RED + "Kills : " + p.getStatistic(Statistic.PLAYER_KILLS))
+                .getScore("    ")
                 .setScore(7);
         objective
-                .getScore(ChatColor.RED + "Morts : " + p.getStatistic(Statistic.DEATHS))
+                .getScore(ChatColor.YELLOW + "Temps joué : " + game.getDate().getGameDuration())
                 .setScore(6);
         objective
-                .getScore("    ")
+                .getScore("     ")
                 .setScore(5);
         objective
-                .getScore(ChatColor.YELLOW + "Temps joué : " + game.getDate().getGameDuration())
+                .getScore(ChatColor.YELLOW + "Timer : " + game.getDate().getDayDuration())
                 .setScore(4);
         objective
-                .getScore("     ")
+                .getScore(ChatColor.YELLOW + "Jour " + game.getDate().getDay())
                 .setScore(3);
         objective
-                .getScore(ChatColor.YELLOW + "Timer : " + game.getDate().getDayDuration())
+                .getScore("      ")
                 .setScore(2);
         objective
-                .getScore(ChatColor.YELLOW + "Jour " + game.getDate().getDay())
+                .getScore(getDistanceAndArrow(p))
                 .setScore(1);
 
 
         p.setScoreboard(sb);
 
-    }
-
-    private String teamColor(Player p) {
-        if (game.getFkList().contain(p)) {
-            FK_Team t = game.getFkList().searchTeam(p);
-            return ChatColor.valueOf(String.valueOf(t.getTeamColor())) + "Équipe " + t.getTeamName();
-        }
-        else
-            return ChatColor.GRAY + "Spectateur";
-    }
-
-    private ChatColor getColorEvent(FK_Event event) {
-        return event.isActivated() ? ChatColor.GREEN : ChatColor.MAGIC;
     }
 
     @EventHandler
@@ -250,6 +249,56 @@ public class ChatJoinQuitListener implements Listener {
             );
         }
 
+    }
+
+    private ChatColor getColorEvent(FK_Event event) {
+        return event.isActivated() ? ChatColor.GREEN : ChatColor.MAGIC;
+    }
+
+    private String getDistanceAndArrow(Player p) {
+        // tell the distance to our base / if we're in our base
+
+        FK_Team team = teams.contain(p) ? teams.searchTeam(p) : null;
+
+        if (team == null) return ChatColor.GRAY + "SPECTATEUR";
+
+        String valueToReturn;
+
+        if (p.getLocation().getWorld() == Bukkit.getWorld("world")) {
+
+            if (team.inBaseArea(p.getLocation()))
+                valueToReturn = "Vous êtes dans la base";
+            else
+                valueToReturn = ChatColor.valueOf(String.valueOf(team.getTeamColor())) + "" + ChatColor.BOLD + distancePoints(team.getCenterBase(), p.getLocation()) + " Blocks";
+
+        } else
+            valueToReturn = ChatColor.MAGIC + "On m'appelle l'Ovni poupoupoupou";
+
+        return valueToReturn;
+
+    }
+
+    private int distancePoints(Location location1, Location location2) {
+
+        // return the distance between 2 location in nb of blocks
+
+        int x1 = location1.getBlockX();
+        int z1 = location1.getBlockZ();
+
+        int x2 = location2.getBlockX();
+        int z2 = location2.getBlockZ();
+
+        int distanceX = dist(x1, x2),
+                distanceZ = dist(z1, z2);
+
+        return (int) (Math.sqrt(distanceX * distanceX + distanceZ * distanceZ) - 16);
+    }
+
+    private int dist(int a, int b) {
+        if (a < b)
+            return b - a;
+        else
+            return a - b;
     }
 
 }

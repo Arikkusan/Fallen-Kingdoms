@@ -1,7 +1,5 @@
 package fr.arikkusan.FKClasses;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.ArrayList;
 
 public class FK_Event {
@@ -11,13 +9,13 @@ public class FK_Event {
     private int startDate;
     private boolean activated;
 
-    public FK_Event(@NonNull String name, @NonNull String desc, int startDate) {
+    public FK_Event(String name, String desc, int startDate) {
         this.name = name;
         this.desc = desc;
         this.startDate = startDate;
     }
 
-    public FK_Event(@NonNull String name, @NonNull String desc) {
+    public FK_Event(String name, String desc) {
         this.name = name;
         this.desc = desc;
     }

@@ -9,8 +9,7 @@
 package fr.arikkusan.command;
 
 import fr.arikkusan.FKClasses.FK_Game;
-import fr.arikkusan.FKClasses.FK_Team;
-import fr.arikkusan.utils.Fct_Utils;
+import fr.arikkusan.utils.FK_Functions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -34,50 +33,16 @@ public class CustomNameCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
+        FK_Functions fkFunctions = new FK_Functions(game);
+
         Player p = (Player) sender;
 
-        if (args.length == 2) {
+        if (args.length == 2)
+            fkFunctions.setCustomName(args[0], args[1]);
 
-            Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
-            ArrayList<String> playersName = new ArrayList<>();
-
-            for (Player player : players)
-                playersName.add(player.getName());
-
-            if (playersName.contains(args[1])) {
-                for (Player player : players) {
-                    if (player.getName().equalsIgnoreCase(args[1])) {
-                        player.setCustomName(args[0]);
-                        player.setDisplayName(p.getCustomName());
-
-                        new Fct_Utils().setListName(game, player);
-
-                        p.sendMessage(
-                                ChatColor.GOLD +
-                                        "Le surnom de " + player.getName() + " a été défini en tant que " +
-                                        ChatColor.GOLD +
-                                        player.getCustomName()
-                        );
-                    }
-                }
-
-            }
-
-
-
-        } else if (args.length == 1) {
-            p.setCustomName(args[0]);
-            p.setDisplayName(p.getCustomName());
-            p.sendMessage(
-                    ChatColor.GOLD +
-                            "Votre surnom a été défini en tant que " +
-                            ChatColor.GOLD +
-                            p.getCustomName()
-            );
-
-            new Fct_Utils().setListName(game, p);
-
-        } else
+        else if (args.length == 1)
+            fkFunctions.setCustomName(p, args[0]);
+        else
             p.sendMessage(
                     ChatColor.RED +
                             "Pour obtenir un nom custom utilise la commande /CustomName <NomCustom>"

@@ -1,7 +1,11 @@
 package fr.arikkusan.command;
 
+import fr.arikkusan.FKClasses.FK_Game;
 import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Team;
+import fr.arikkusan.Menus.MainMenu;
+import fr.arikkusan.main;
+import fr.arikkusan.utils.FK_Functions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -10,7 +14,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.lock.qual.GuardedByUnknown;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,30 +39,16 @@ public class FKTeamCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
+        FK_Functions fct = new FK_Functions();
+
         if (args.length == 0) {
 
-            sender.sendMessage(
-                    ChatColor.DARK_GREEN +
-                            "La commande FKTeam ou FKT permet de gérer les différentes teams pour la partie de Fallen Kingdom."
-            );
-            sender.sendMessage(
-                    ChatColor.DARK_GREEN +
-                            "  Grâce à celle-ci vous pourrez créer / modifier / supprimer / rejoindre et quitter des groupes"
-            );
-            sender.sendMessage(
-                    ChatColor.DARK_GREEN +
-                            "  L'auto-complétion de la commande vous guidera tout au long de votre entrée de commande !"
+            main.getInstance().getGuiManager().open((Player) sender, MainMenu.class);
 
-            );
-            sender.sendMessage(
-                    ChatColor.GRAY +
-                            "" +
-                            ChatColor.ITALIC +
-                            "  La gestion de groupe sera désactivée lorsque la partie sera lancée !"
-
-            );
 
         } else {
+
+
 
             if (args[0].equalsIgnoreCase("create") && args.length == 2) {
                 sender.sendMessage(

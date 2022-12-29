@@ -10,10 +10,14 @@ package fr.arikkusan.command;
 
 import fr.arikkusan.FKClasses.FK_List;
 import fr.arikkusan.FKClasses.FK_Game;
+import fr.arikkusan.Menus.Teams.GameMenu;
+import fr.arikkusan.main;
+import fr.arikkusan.utils.FK_Functions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +35,10 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (args.length >= 1) {
+        if (args.length == 0) {
+            main.getInstance().getGuiManager().open((Player) sender, GameMenu.class);
+            return true;
+        }
 
             switch (args[0].toLowerCase()) {
                 case "nom":
@@ -59,7 +66,7 @@ public class FkGameCommands implements CommandExecutor, TabCompleter {
             }
 
 
-        }
+
 
         return true;
     }
