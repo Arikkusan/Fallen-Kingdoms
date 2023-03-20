@@ -12,13 +12,13 @@ commands:
     description: Allow player to set their own Custom name
     usage: /<command>
     aliases: [cst]
+  gm:
+    description: Put the user in gm1 / gm0
+    usage: /<command>
   FallenKingdoms:
     description: Run fallen Kingdoms logic
     usage: /<command>
     aliases: [fk, game]
-  gm:
-    description: Put the user in gm1 / gm0
-    usage: /<command>
   teamName:
     description: Allow changing the team name
     usage: /<command>

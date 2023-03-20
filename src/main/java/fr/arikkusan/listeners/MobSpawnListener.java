@@ -23,13 +23,28 @@ public class MobSpawnListener implements Listener {
 
         if (mob.getType() == EntityType.CREEPER) {
 
-            boolean empowered = Math.random() < 0.1;
+            boolean empowered = Math.random() < 0.2;
 
             if (empowered) {
 
                 e.setCancelled(true);
                 Creeper creeper = (Creeper) (e.getEntity().getWorld().spawnEntity(e.getEntity().getLocation(), EntityType.CREEPER));
                 creeper.setPowered(true);
+
+            }
+
+
+        }
+
+        if (mob.getType() == EntityType.ZOMBIE) {
+
+            boolean toCreep = Math.random() < 0.4;
+
+            if (toCreep) {
+
+                e.setCancelled(true);
+                Creeper creeper = (Creeper) (e.getEntity().getWorld().spawnEntity(e.getEntity().getLocation(), EntityType.CREEPER));
+                creeper.setPowered(Math.random() < 0.2);
 
             }
 

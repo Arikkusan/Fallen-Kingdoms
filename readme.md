@@ -1,14 +1,27 @@
-Fallen Kingdoms fait par Arikkusan
+# Fallen Kingdoms fait par Arikkusan
 
-## Idées :
+## To Do :
 - taux d'apparition de creep a revoir
 - Flèche indiquant la base
 - disable fire aspect
 - timer jusqu'à hit ou 60 sec quand dans salle des coffres 
 - mob aléatoires cheaté sur map avec loot
 - course contre la montre random
--
+
+
 - [?le faire] résumé type de morts / personnes
+- limiter totalement fire aspect / flame / stuff pour flyde 
+- Créer un role dieu
+- detecter la base
+- détecter la salle
+- système de crochetage
+- bousolle indiquant les bases
+- invsee
+- retirer strength quand 1 kill fait 
+- impossible taper avant pvp
+- impossible changer monde avant nether
+
+
 - remettre les noms custom dans scoreboard quand déco-reco - FAIT?
 - [dans serveur] compteur de morts par personne - FAIT
 - pas casser block chez ennemis - FAIT

@@ -177,7 +177,7 @@ public class FK_Game {
     }
 
     public void pauseGame() {
-        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRuleValue(DAYLIGHT_CYCLE, "true");
+        Objects.requireNonNull(Bukkit.getServer().getWorld("world")).setGameRuleValue(DAYLIGHT_CYCLE, "false");
         setPaused(true);
 
         FK_Time_Runnable board = new FK_Time_Runnable(FK_TIME_RUNNABLE_ID);
