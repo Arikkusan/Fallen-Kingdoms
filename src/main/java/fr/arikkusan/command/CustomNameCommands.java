@@ -35,6 +35,7 @@ public class CustomNameCommands implements CommandExecutor, TabCompleter {
 
         FK_Functions fkFunctions = new FK_Functions(game);
 
+        // le joueur qui envoie la commande
         Player p = (Player) sender;
 
         if (args.length == 2)
