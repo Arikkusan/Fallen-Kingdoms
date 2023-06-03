@@ -3,25 +3,25 @@
 ## To Do :
 - taux d'apparition de creep a revoir
 - Flèche indiquant la base
-- disable fire aspect
+- commande pour disable fire aspect
 - timer jusqu'à hit ou 60 sec quand dans salle des coffres 
-- mob aléatoires cheaté sur map avec loot
-- course contre la montre random
 
-
-- [?le faire] résumé type de morts / personnes
-- limiter totalement fire aspect / flame / stuff pour flyde 
+## Possibles améliorations
+- Résumé types de morts / personnes
+- limiter totalement fire aspect / flame / stuff pour certaines personnes
 - Créer un role dieu
-- detecter la base
 - détecter la salle
 - système de crochetage
-- bousolle indiquant les bases
 - invsee
 - retirer strength quand 1 kill fait 
 - impossible taper avant pvp
 - impossible changer monde avant nether
+- mob aléatoires cheaté sur map avec loot
+- course contre la montre random
 
-
-- remettre les noms custom dans scoreboard quand déco-reco - FAIT?
-- [dans serveur] compteur de morts par personne - FAIT
-- pas casser block chez ennemis - FAIT
+## Fait :
+- remettre les noms custom dans scoreboard quand déco-reco - VOIR SI FAIT
+- detecter la base
+- bousolle indiquant les bases
+- [dans serveur] compteur de morts par personne
+- pas casser block chez ennemis
